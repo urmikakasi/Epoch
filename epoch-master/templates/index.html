@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<form action="/" method="post">
+    <div class="form-group">
+        <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Stock Symbol" type="text">
+        &nbsp;<input name="submit" value="Look up" type="submit">
+    </div>
+</form>
+{% if method=="POST" %}
+    <p>The stock price of <strong>{{ quote['name'] }}</strong> is <strong>${{ quote['price'] }}</strong>.</p>
+{% endif %}
+<br />
+<hr>
+<br />
+<h3>Your Holdings</h3>
+
+{% if stocks is defined %}
+<table class="styled-table center">
+    <thead>
+    <tr>
+      <th>Company</th>
+      <th>Number</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for stock in stocks %}
+    <tr>
+      <td>{{ stock["symbol"] }}</td>
+      <td>{{ stock["number"] }}</td>
+      <td>${{ price[stock["symbol"]] }}</td>
+      <td>${{ '%0.2f'| format(price[stock["symbol"]] * stock["number"]) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="small text-center text-muted">You don't own any stocks yet. </p>
+{% endif %}
+<br /><hr><br />
+<p>Your remaining cash balance: ${{ cash }}</p>
+<p>Your total wealth: ${{ wealth }}</p>
+
+
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+    
+    <div id="tradingview_f5029"></div>
+    <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL Chart</span></a></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+    new TradingView.widget(
+    {
+    "width": 980,
+    "height": 610,
+    "symbol": "NASDAQ:AAPL",
+    "interval": "D",
+    "timezone": "Etc/UTC",
+    "theme": "light",
+    "style": "1",
+    "locale": "in",
+    "toolbar_bg": "#f1f3f6",
+    "enable_publishing": false,
+    "allow_symbol_change": true,
+    "container_id": "tradingview_f5029"
+  }
+    );
+    </script>
+  </div>
+  <!-- TradingView Widget END -->
+  {% endblock %}
+{% block footer %}
+<footer class="small text-center text-muted">
+    
+</footer>
+{% endblock %}
